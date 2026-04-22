@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Palette</title>
+    <style>
+        :root {
+            --bg-color: #f9f9f7;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --accent: #5c7f67;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .section-label {
+            grid-column: 1 / -1;
+            height: 1px;
+            background: #eee;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .card {
+            aspect-ratio: 1 / 1;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            user-select: none;
+            border: 2px solid transparent;
+        }
+
+        /* 選択時の動き */
+        .card:active {
+            transform: scale(0.92);
+        }
+
+        .card.selected {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* プラス感情のカード色設定（さりげなく） */
+        .pos { background: #fffdf2; }
+        /* マイナス感情のカード色設定（さりげなく） */
+        .neg { background: #f2f4ff; }
+
+        .action-area {
+            text-align: center;
+        }
+
+        .btn-confirm {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            opacity: 0.3;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .btn-confirm.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="board" id="cardBoard">
+        <div class="card pos" data-id="p1">☀️</div>
+        <div class="card pos" data-id="p2">🌱</div>
+        <div class="card pos" data-id="p3">🎈</div>
+        <div class="card pos" data-id="p4">✨</div>
+        <div class="card pos" data-id="p5">🌊</div>
+        <div class="card pos" data-id="p6">🕯️</div>
+
+        <div class="section-label"></div>
+
+        <div class="card neg" data-id="n1">☁️</div>
+        <div class="card neg" data-id="n2">🥀</div>
+        <div class="card neg" data-id="n3">⛓️</div>
+        <div class="card neg" data-id="n4">⚡</div>
+        <div class="card neg" data-id="n5">🧊</div>
+        <div class="card neg" data-id="n6">🌑</div>
+    </div>
+
+    <div class="action-area">
+        <button id="confirmBtn" class="btn-confirm">決定</button>
+    </div>
+</div>
+
+<script>
+    const cards = document.querySelectorAll('.card');
+    const confirmBtn = document.getElementById('confirmBtn');
+    let selectedId = null;
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            // 選択の解除と設定
+            cards.forEach(c => c.classList.remove('selected'));
+            
+            if (selectedId === card.dataset.id) {
+                selectedId = null;
+                confirmBtn.classList.remove('active');
+            } else {
+                card.classList.add('selected');
+                selectedId = card.dataset.id;
+                confirmBtn.classList.add('active');
+            }
+        });
+    });
+
+    confirmBtn.addEventListener('click', () => {
+        if (selectedId) {
+            alert(`選択された感情ID: ${selectedId}\nここから保存処理や共有処理へ`);
+        }
+    });
+</script>
+
+</body>
+</html>
